@@ -30,6 +30,63 @@ function decodeJwtResponse(token) {
   return JSON.parse(jsonPayload);
 }
 
+// Mobile menu functionality
+function initMobileMenu() {
+  const mobileMenuButton = document.getElementById("mobileMenuButton");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const menuOpenPath = mobileMenuButton.querySelector(".menu-open");
+  const menuClosePath = mobileMenuButton.querySelector(".menu-close");
+  let isOpen = false;
+
+  function toggleMenu() {
+    isOpen = !isOpen;
+
+    // Toggle menu visibility
+    if (isOpen) {
+      mobileMenu.style.height = mobileMenu.scrollHeight + "px";
+      menuOpenPath.classList.add("hidden");
+      menuClosePath.classList.remove("hidden");
+    } else {
+      mobileMenu.style.height = "0";
+      menuOpenPath.classList.remove("hidden");
+      menuClosePath.classList.add("hidden");
+    }
+  }
+
+  // Add click event listener to menu button
+  mobileMenuButton.addEventListener("click", toggleMenu);
+
+  // Close menu when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      isOpen &&
+      !mobileMenu.contains(event.target) &&
+      !mobileMenuButton.contains(event.target)
+    ) {
+      toggleMenu();
+    }
+  });
+
+  // Handle window resize
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768 && isOpen) {
+      // 768px is the md breakpoint in Tailwind
+      toggleMenu();
+    }
+  });
+
+  // Sync dark mode toggles
+  const darkModeToggleMobile = document.getElementById("darkModeToggleMobile");
+  darkModeToggleMobile.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+    if (document.documentElement.classList.contains("dark")) {
+      localStorage.theme = "dark";
+    } else {
+      localStorage.theme = "light";
+    }
+  });
+}
+
 // Dark mode toggle functionality
 function initDarkMode() {
   const darkModeToggle = document.getElementById("darkModeToggle");
@@ -119,48 +176,6 @@ async function loadRandomPlaylists() {
     loadingSection.classList.add("hidden");
     errorSection.classList.remove("hidden");
     errorMessage.textContent = error.message;
-  }
-}
-
-// Mobile menu functionality
-function initMobileMenu() {
-  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-  const mobileMenu = document.getElementById("mobileMenu");
-  const menuIcon = document.getElementById("menuIcon");
-  const closeIcon = document.getElementById("closeIcon");
-  const mobileDarkModeToggle = document.getElementById("mobileDarkModeToggle");
-
-  if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener("click", () => {
-      const isExpanded = mobileMenuBtn.getAttribute("aria-expanded") === "true";
-
-      mobileMenuBtn.setAttribute("aria-expanded", !isExpanded);
-      mobileMenu.classList.toggle("hidden");
-      menuIcon.classList.toggle("hidden");
-      closeIcon.classList.toggle("hidden");
-
-      if (!isExpanded) {
-        // Opening the menu
-        mobileMenu.style.maxHeight = mobileMenu.scrollHeight + "px";
-        mobileMenu.style.opacity = "1";
-      } else {
-        // Closing the menu
-        mobileMenu.style.maxHeight = "0";
-        mobileMenu.style.opacity = "0";
-      }
-    });
-  }
-
-  // Sync mobile dark mode toggle with desktop
-  if (mobileDarkModeToggle) {
-    mobileDarkModeToggle.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      if (document.documentElement.classList.contains("dark")) {
-        localStorage.theme = "dark";
-      } else {
-        localStorage.theme = "light";
-      }
-    });
   }
 }
 

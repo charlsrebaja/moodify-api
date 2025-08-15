@@ -32,18 +32,6 @@
   border-color: rgba(75, 85, 99, 0.5);
 }
 
-/* Mobile menu transitions */
-#mobileMenu {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-#mobileMenu.hidden {
-  display: none;
-}
-
 .mood-btn::before {
   content: "";
   position: absolute;
@@ -109,6 +97,28 @@
   background-color: rgba(31, 41, 55, 0.8);
   border-color: rgba(75, 85, 99, 0.5);
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile menu styles */
+#mobileMenu {
+  transition: height 0.3s ease-in-out;
+}
+
+#mobileMenu .menu-close,
+#mobileMenu .menu-open {
+  transition: opacity 0.2s ease-in-out;
+}
+
+#mobileMenuButton {
+  transition: all 0.2s ease-in-out;
+}
+
+#mobileMenuButton:hover {
+  opacity: 0.8;
+}
+
+#mobileMenu.expanded {
+  height: auto;
 }
 
 .playlist-card:hover {
